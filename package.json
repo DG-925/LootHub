@@ -1,0 +1,46 @@
+{
+  "name": "loothub",
+  "productName": "LootHub",
+  "version": "1.0.0",
+  "description": "Free games, deals, DLC, Twitch drops and subscription prices across every PC store — with alerts.",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "web": "npx --yes http-server app -p 5173 -c-1",
+    "icons": "node scripts/build-icons.mjs",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^7.3.1",
+    "electron": "^45.3.1",
+    "electron-builder": "^26.18.0",
+    "simple-icons": "^16.37.0"
+  },
+  "build": {
+    "appId": "com.loothub.app",
+    "productName": "LootHub",
+    "files": [
+      "electron/**",
+      "app/**",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "app/assets/icon-512.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "app/assets/icon-512.png"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "app/assets/icon-512.png"
+    }
+  }
+}
