@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LootHub — Design Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#1A1A1A; --panel:#222222; --panel2:#2A2A2A; --line:#333;
+  --purple:#8B5CF6; --purple2:#A78BFA; --purpleDeep:#6D28D9; --white:#FFFFFF;
+  --muted:#A1A1AA; --green:#22C55E; --red:#F43F5E; --amber:#F59E0B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--white);font-family:Inter,system-ui,sans-serif;font-size:14px}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.app{display:flex;min-height:100vh;background:linear-gradient(90deg,#141414 248px,transparent 248px)}
+.mo{display:none}
+
+/* Sidebar */
+.side{width:248px;flex-shrink:0;background:#141414;border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh}
+.logo{display:flex;align-items:center;gap:10px;padding:4px 10px 22px;font-weight:800;font-size:20px;letter-spacing:-.3px}
+.logo .mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--purple),var(--purpleDeep));display:grid;place-items:center;box-shadow:0 6px 20px #8b5cf655}
+.logo span b{color:var(--purple2)}
+.navlabel{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#71717a;padding:14px 12px 6px}
+.nav{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;color:#d4d4d8;font-weight:500}
+.nav:hover{background:#1f1f1f}
+.nav.active{background:linear-gradient(90deg,#8b5cf633,#8b5cf60d);color:#fff;box-shadow:inset 3px 0 0 var(--purple)}
+.nav svg{width:19px;height:19px;flex-shrink:0}
+.nav .count{margin-left:auto;font-size:11px;background:var(--purple);padding:2px 7px;border-radius:99px;font-weight:700}
+.side .spacer{flex:1}
+.sharecard{background:linear-gradient(135deg,#8b5cf6,#5b21b6);border-radius:14px;padding:16px;margin-top:10px}
+.sharecard h4{font-size:14px;margin-bottom:4px}
+.sharecard p{font-size:12px;opacity:.85;margin-bottom:12px}
+.sharecard button{background:#fff;color:#4c1d95;font-weight:700;padding:8px 12px;border-radius:9px;width:100%;display:flex;gap:8px;justify-content:center;align-items:center}
+
+/* Main */
+.main{flex:1;min-width:0}
+.top{display:flex;align-items:center;gap:14px;padding:16px 32px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#1A1A1Aee;backdrop-filter:blur(10px);z-index:5}
+.search{flex:1;max-width:520px;display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:10px 14px;color:var(--muted)}
+.search svg{width:17px}
+.iconbtn{width:40px;height:40px;border-radius:11px;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;position:relative}
+.iconbtn svg{width:18px}
+.iconbtn .dot{position:absolute;top:8px;right:9px;width:8px;height:8px;border-radius:50%;background:var(--purple);border:2px solid var(--panel)}
+.avatar{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,#c4b5fd,#7c3aed);display:grid;place-items:center;font-weight:800}
+.mobile-top{display:none}
+.content{padding:28px 32px 60px;max-width:1400px}
+h1{font-size:28px;font-weight:800;letter-spacing:-.5px}
+.sub{color:var(--muted);margin-top:4px}
+.pagehead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+.section{margin-top:34px}
+.sechead{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sechead h2{font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px}
+.sechead a{color:var(--purple2);font-weight:600;font-size:13px}
+
+/* chips */
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:8px 14px;border-radius:99px;background:var(--panel);border:1px solid var(--line);color:#d4d4d8;font-weight:500;font-size:13px;white-space:nowrap}
+.chip.on{background:var(--purple);border-color:var(--purple);color:#fff}
+
+/* hero */
+.hero{border-radius:20px;overflow:hidden;position:relative;min-height:300px;display:flex;align-items:flex-end;padding:32px;
+  background:radial-gradient(circle at 80% 20%,#a78bfa66,transparent 45%),linear-gradient(120deg,#2e1065,#6d28d9 55%,#a855f7)}
+.hero::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,#ffffff08 0 2px,transparent 2px 22px)}
+.hero .art{position:absolute;right:40px;top:30px;bottom:30px;width:38%;border-radius:16px;background:linear-gradient(160deg,#1e1b4b,#7c3aed);box-shadow:0 30px 60px #0008;display:grid;place-items:center;font-size:64px;font-weight:900;color:#ffffff22;letter-spacing:-2px}
+.hero .info{position:relative;z-index:2;max-width:52%}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:7px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.b-free{background:var(--green);color:#052e16}
+.b-purple{background:#8b5cf633;color:#c4b5fd;border:1px solid #8b5cf666}
+.b-white{background:#fff;color:#1a1a1a}
+.b-red{background:var(--red);color:#fff}
+.hero h3{font-size:38px;font-weight:900;margin:12px 0 6px;letter-spacing:-1px}
+.hero p{opacity:.85;margin-bottom:18px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:11px;font-weight:700}
+.btn-w{background:#fff;color:#1a1a1a}
+.btn-p{background:var(--purple);color:#fff}
+.btn-g{background:#ffffff1a;border:1px solid #ffffff33}
+.btn svg{width:16px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
+.stat .k{color:var(--muted);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;display:flex;align-items:center;gap:8px}
+.stat .v{font-size:28px;font-weight:800;margin-top:8px}
+.stat .d{font-size:12px;color:var(--green);margin-top:2px}
+.stat .ic{width:30px;height:30px;border-radius:9px;background:#8b5cf622;display:grid;place-items:center;color:var(--purple2)}
+.stat .ic svg{width:16px}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:.2s;cursor:pointer}
+.card:hover{transform:translateY(-3px);border-color:#8b5cf688;box-shadow:0 14px 40px #8b5cf622}
+.cover{aspect-ratio:16/9;position:relative;display:grid;place-items:center;font-weight:900;font-size:26px;color:#ffffff30;letter-spacing:-1px}
+.cover .tl{position:absolute;top:10px;left:10px;display:flex;gap:6px}
+.cover .tr{position:absolute;top:10px;right:10px}
+.share{width:32px;height:32px;border-radius:9px;background:#0009;display:grid;place-items:center;backdrop-filter:blur(6px)}
+.share svg{width:15px;color:#fff}
+.cbody{padding:14px}
+.ctitle{font-weight:700;font-size:15px;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cmeta{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--muted);font-size:12px}
+.plat{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#d4d4d8;font-weight:500}
+.pi{width:20px;height:20px;border-radius:6px;display:grid;place-items:center;font-size:9px;font-weight:800;color:#fff;flex-shrink:0}
+.price{display:flex;align-items:center;gap:8px;margin-top:10px}
+.old{text-decoration:line-through;color:#71717a;font-size:13px}
+.new{font-weight:800;font-size:16px}
+.new.free{color:var(--green)}
+.off{background:var(--purple);color:#fff;font-weight:800;font-size:12px;padding:3px 7px;border-radius:6px}
+.timer{display:inline-flex;align-items:center;gap:5px;color:var(--amber);font-weight:600;font-size:12px}
+.timer svg{width:13px}
+
+/* deals table */
+.table{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.tr-row{display:grid;grid-template-columns:72px 2.2fr 1.2fr .8fr 1fr 1.1fr 40px;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.tr-row:last-child{border-bottom:0}
+.tr-row.head{color:#71717a;font-size:11px;text-transform:uppercase;letter-spacing:.8px;font-weight:700;background:#1f1f1f}
+.thumb{width:72px;height:40px;border-radius:8px}
+.low{font-size:11px;color:var(--green);font-weight:600}
+
+/* drops */
+.drop{display:grid;grid-template-columns:150px 1fr auto;gap:18px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;align-items:center}
+.drop + .drop{margin-top:12px}
+.drop .dc{height:90px;border-radius:12px;display:grid;place-items:center;font-weight:900;color:#ffffff33;font-size:20px;position:relative}
+.live{position:absolute;bottom:8px;left:8px;background:var(--red);font-size:10px;font-weight:800;padding:3px 7px;border-radius:5px;color:#fff;display:flex;align-items:center;gap:5px}
+.live::before{content:"";width:6px;height:6px;border-radius:50%;background:#fff}
+.rewards{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.reward{display:flex;align-items:center;gap:8px;background:var(--panel2);border:1px solid var(--line);padding:6px 10px 6px 6px;border-radius:10px;font-size:12px}
+.reward i{width:28px;height:28px;border-radius:7px;display:block;background:linear-gradient(135deg,#a78bfa,#6d28d9)}
+.bar{height:6px;border-radius:99px;background:#333;margin-top:10px;overflow:hidden;max-width:420px}
+.bar b{display:block;height:100%;background:linear-gradient(90deg,var(--purple),var(--purple2))}
+.twitch{background:#9146FF;color:#fff}
+
+/* subs */
+.subs{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.sub-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;position:relative;overflow:hidden}
+.sub-card .logoBox{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-weight:900;font-size:16px;margin-bottom:14px}
+.sub-card h3{font-size:17px}
+.sub-card .pr{font-size:30px;font-weight:800;margin:12px 0 2px}
+.sub-card .pr small{font-size:13px;color:var(--muted);font-weight:500}
+.sub-card ul{list-style:none;margin:14px 0;color:#d4d4d8;font-size:13px;display:grid;gap:7px}
+.sub-card li::before{content:"✓";color:var(--purple2);font-weight:800;margin-right:8px}
+.ribbon{position:absolute;top:16px;right:16px}
+
+/* platforms */
+.plats{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.platc{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px}
+.platc .pl{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-weight:900;font-size:14px;color:#fff;flex-shrink:0}
+.platc h4{font-size:15px}
+.platc p{font-size:12px;color:var(--muted);margin-top:2px}
+.toggle{margin-left:auto;width:40px;height:23px;border-radius:99px;background:#3f3f46;position:relative;flex-shrink:0}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:#fff;transition:.2s}
+.toggle.on{background:var(--purple)}
+.toggle.on::after{left:20px}
+
+/* settings */
+.setlist{background:var(--panel);border:1px solid var(--line);border-radius:16px;max-width:760px}
+.setrow{display:flex;align-items:center;gap:16px;padding:18px 20px;border-bottom:1px solid var(--line)}
+.setrow:last-child{border:0}
+.setrow h4{font-size:14px}
+.setrow p{font-size:12px;color:var(--muted);margin-top:3px}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.overlay.show{display:flex}
+.modal{background:#1f1f1f;border:1px solid var(--line);border-radius:22px;max-width:720px;width:100%;overflow:hidden}
+.modal .cover{aspect-ratio:21/8;font-size:48px}
+.modal .mb{padding:24px}
+.modal h2{font-size:26px;font-weight:800;margin:10px 0 6px}
+.modal .desc{color:#d4d4d8;line-height:1.6}
+.openbox{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.openbox .btn{justify-content:center;padding:14px}
+.hint{font-size:12px;color:var(--muted);margin-top:12px;display:flex;gap:8px;align-items:center}
+.hint svg{width:14px;flex-shrink:0}
+.closeX{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:10px;background:#000a;display:grid;place-items:center;z-index:3}
+
+/* bottom nav (mobile) */
+.bnav{display:none}
+
+@media (max-width:860px){
+  .side{display:none}
+  .top{display:none}
+  .mobile-top{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;position:sticky;top:0;background:#1A1A1Af0;backdrop-filter:blur(10px);z-index:5;border-bottom:1px solid var(--line)}
+  .mobile-top .logo{padding:0;font-size:18px}
+  .mobile-top .logo .mark{width:30px;height:30px}
+  .content{padding:18px 16px 100px}
+  h1{font-size:23px}
+  .hero{min-height:360px;padding:20px;align-items:flex-end}
+  .hero .art{left:20px;right:20px;top:20px;bottom:auto;height:150px;width:auto}
+  .hero .info{max-width:100%}
+  .hero h3{font-size:26px}
+  .stats{grid-template-columns:repeat(2,1fr);gap:10px}
+  .stat{padding:14px}.stat .v{font-size:22px}
+  .grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .cbody{padding:10px}.ctitle{font-size:13px}
+  .hscroll{display:flex;overflow-x:auto;gap:10px;margin:0 -16px;padding:0 16px;scrollbar-width:none}
+  .hscroll .card{min-width:230px}
+  .chips{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px;padding:0 16px;scrollbar-width:none}
+  .tr-row{grid-template-columns:64px 1fr auto;gap:10px}
+  .tr-row .hm{display:none}
+  .mo{display:block}
+  .app{background:none}
+  .tr-row.head{display:none}
+  .thumb{width:64px;height:36px}
+  .drop{grid-template-columns:1fr;gap:12px}
+  .drop .dc{height:120px}
+  .openbox{grid-template-columns:1fr}
+  .modal{border-radius:22px 22px 0 0;align-self:flex-end}
+  .overlay{padding:0}
+  .bnav{display:flex;position:fixed;bottom:0;left:0;right:0;background:#141414f5;backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:8px 6px 18px;z-index:20;justify-content:space-around}
+  .bnav a{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:#a1a1aa;font-weight:600;padding:4px 8px;border-radius:10px}
+  .bnav a svg{width:21px;height:21px}
+  .bnav a.active{color:#fff}
+  .bnav a.active svg{color:var(--purple2)}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side"></aside>
+  <main class="main">
+    <div class="top">
+      <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search games, drops, deals, DLC…</div>
+      <div style="flex:1"></div>
+      <button class="iconbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21h4"/></svg><span class="dot"></span></button>
+      <div class="avatar">A</div>
+    </div>
+    <div class="mobile-top">
+      <div class="logo"><div class="mark">${LOGO}</div><span>Loot<b>Hub</b></span></div>
+      <div class="row" style="gap:8px">
+        <button class="iconbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+        <button class="iconbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21h4"/></svg><span class="dot"></span></button>
+      </div>
+    </div>
+    <div class="content" id="content"></div>
+  </main>
+</div>
+<nav class="bnav" id="bnav"></nav>
+<div class="overlay" id="overlay"></div>
+
+<script>
+const I = {
+  home:'<path d="M3 11 12 3l9 8"/><path d="M5 10v10h14V10"/>',
+  gift:'<rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18"/><path d="M12 8S10 3 7.5 4 9 8 12 8Zm0 0s2-5 4.5-4S15 8 12 8Z"/>',
+  tag:'<path d="M20 12 12 20 3 11V3h8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+  drop:'<path d="M4 4h16v11l-4 4h-4l-3 3v-3H4z"/><path d="M10 8v4M15 8v4"/>',
+  dlc:'<path d="m12 2 9 5v10l-9 5-9-5V7z"/><path d="m3 7 9 5 9-5M12 12v10"/>',
+  card:'<rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/>',
+  grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  heart:'<path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-3 4.5 4.5 0 0 1 8 3c0 6-8 11-8 11Z"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',
+  share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  ext:'<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  app:'<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+  menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
+  bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>'
+};
+const ic = (n,extra='') => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ${extra}>${I[n]}</svg>`;
+const LOGO = '<svg viewBox="0 0 24 24" width="18" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18"/><path d="M12 8S10 3 7.5 4 9 8 12 8Zm0 0s2-5 4.5-4S15 8 12 8Z"/></svg>';
+document.querySelector('.mobile-top .mark').innerHTML = LOGO;
+
+const P = { // platform badges (colored initials — real logos go in the build)
+ steam:['Steam','ST','#1b2838'], epic:['Epic Games','EG','#313131'], gog:['GOG','GOG','#86328a'],
+ ubi:['Ubisoft Connect','UB','#0070ff'], ea:['EA app','EA','#ff4747'], bnet:['Battle.net','BN','#148eff'],
+ ms:['Microsoft Store','MS','#107c10'], itch:['itch.io','IT','#fa5c5c'], amz:['Amazon Games','AG','#ff9900'],
+ humble:['Humble Store','HB','#cb272c'], riot:['Riot Client','RC','#d13639'], rock:['Rockstar Launcher','R★','#fcaf17'],
+ ig:['IndieGala','IG','#e4002b'], fan:['Fanatical','FN','#ff6b00'], gmg:['Green Man Gaming','GM','#00b25d'],
+ gj:['Game Jolt','GJ','#2f7f6f'], idb:['Indie DB','ID','#4e8fbe'], mdb:['Mod DB','MD','#b31b1b'],
+ gg:['GamersGate','GG','#ec4c1c'], gp:['Gamesplanet','GP','#0a6ad6']
+};
+const pBadge = k => `<span class="pi" style="background:${P[k][2]}">${P[k][1]}</span>`;
+const pTag = k => `<span class="plat">${pBadge(k)}${P[k][0]}</span>`;
+const covers = ['linear-gradient(135deg,#4c1d95,#a855f7)','linear-gradient(135deg,#0f172a,#7c3aed)','linear-gradient(135deg,#581c87,#db2777)','linear-gradient(135deg,#1e1b4b,#6366f1)','linear-gradient(135deg,#3b0764,#9333ea 60%,#f0abfc)','linear-gradient(135deg,#18181b,#6d28d9)','linear-gradient(135deg,#2e1065,#c026d3)','linear-gradient(135deg,#312e81,#8b5cf6)'];
+const cv = i => covers[i % covers.length];
+const initials = t => t.split(' ').map(w=>w[0]).join('').slice(0,3).toUpperCase();
+
+// sample data — fictional titles, the real app pulls live data
+const FREE = [
+ {t:'Neon Drift Racers',p:'epic',old:'$24.99',type:'Free to keep',end:'2d 4h'},
+ {t:'Hollow Crown',p:'steam',old:'$19.99',type:'Free to keep',end:'18h 22m'},
+ {t:'Starbound Couriers',p:'gog',old:'$14.99',type:'Free to keep',end:'5d 1h'},
+ {t:'Ashen Frontier',p:'amz',old:'$29.99',type:'Prime Gaming',end:'11d'},
+ {t:'Pixel Dungeon Tales',p:'itch',old:'$4.99',type:'Free to keep',end:'3d 9h'},
+ {t:'Iron Legion',p:'steam',old:'$39.99',type:'Free weekend',end:'1d 6h'},
+ {t:'Moonlit Harbor',p:'ubi',old:'$19.99',type:'Free to keep',end:'6d'},
+ {t:'Circuit Breakers',p:'ig',old:'$9.99',type:'Free to keep',end:'4d 2h'},
+];
+const DEALS = [
+ {t:'Eclipse Protocol',p:'steam',old:'$59.99',n:'$14.99',off:75,low:true},
+ {t:'Kingdoms of Ember',p:'fan',old:'$49.99',n:'$9.99',off:80,low:true},
+ {t:'Velocity Unbound',p:'epic',old:'$39.99',n:'$15.99',off:60},
+ {t:'Shadow Archive',p:'gmg',old:'$29.99',n:'$7.49',off:75},
+ {t:'Titanfall Sector',p:'ea',old:'$69.99',n:'$20.99',off:70,low:true},
+ {t:'Arcane Depths',p:'gog',old:'$24.99',n:'$4.99',off:80},
+ {t:'Frostbite Legends',p:'humble',old:'$34.99',n:'$11.89',off:66},
+ {t:'Quantum Siege',p:'bnet',old:'$39.99',n:'$19.99',off:50},
+];
+const DROPS = [
+ {g:'Valor Strike',r:['Neon Weapon Skin','Player Card','Spray'],w:'2h watch',prog:65,end:'3d left',live:'12.4k'},
+ {g:'Rift Arena',r:['Legendary Chest','Emote'],w:'4h watch',prog:30,end:'6d left',live:'48.1k'},
+ {g:'Wasteland Raiders',r:['Armor Set','Backpack Skin','Banner'],w:'1h each',prog:100,end:'1d left',live:'9.8k'},
+ {g:'Sky Kingdoms',r:['Mount: Void Drake'],w:'3h watch',prog:0,end:'12d left',live:'22.0k'},
+];
+const DLC = [
+ {t:'Hollow Crown: Frost Expansion',p:'steam',type:'Free DLC'},
+ {t:'Rift Arena — Starter Pack',p:'epic',type:'Free DLC'},
+ {t:'Ashen Frontier Loot Bundle',p:'amz',type:'Prime Loot'},
+ {t:'Valor Strike Weapon Charm',p:'riot',type:'In-game item'},
+ {t:'Moonlit Harbor Soundtrack',p:'ubi',type:'Free DLC'},
+ {t:'Wasteland Outfit Pack',p:'rock',type:'In-game item'},
+ {t:'Sky Kingdoms Mount Skin',p:'bnet',type:'Twitch reward'},
+ {t:'Circuit Breakers Level Pack',p:'gj',type:'Free mod'},
+];
+const SUBS = [
+ {n:'Discord Nitro',l:'DN',c:'#5865F2',pr:'$9.99',per:'/mo',deal:'1 month free with promo',f:['HD streaming','Custom emojis everywhere','2 server boosts']},
+ {n:'Discord Nitro Basic',l:'NB',c:'#5865F2',pr:'$2.99',per:'/mo',f:['Custom emojis','50MB uploads','Nitro badge']},
+ {n:'Xbox Game Pass Ultimate',l:'GP',c:'#107c10',pr:'$19.99',per:'/mo',deal:'First month $1',f:['Hundreds of PC & console games','EA Play included','Cloud gaming']},
+ {n:'EA Play',l:'EA',c:'#ff4747',pr:'$5.99',per:'/mo',f:['10% off EA purchases','Game trials','Vault games']},
+ {n:'Ubisoft+',l:'U+',c:'#0070ff',pr:'$17.99',per:'/mo',deal:'20% off annual',f:['Day-one releases','Premium editions','PC catalog']},
+ {n:'Humble Choice',l:'HC',c:'#cb272c',pr:'$11.99',per:'/mo',f:['8 games every month','Keep them forever','Store discount']},
+ {n:'Amazon Prime Gaming',l:'PG',c:'#9146FF',pr:'$14.99',per:'/mo',f:['Free games monthly','In-game loot','Twitch sub']},
+ {n:'Twitch Turbo',l:'TT',c:'#9146FF',pr:'$11.99',per:'/mo',f:['Ad-free Twitch','Extra emotes','Chat badge']},
+];
+
+const NAV = [
+ ['home','Home','home'],['free','Free Games','gift',8],['deals','Deals','tag'],['drops','Twitch Drops','drop',4],
+ ['dlc','DLC & Loot','dlc'],['subs','Subscriptions','card'],['platforms','Platforms','grid'],['saved','Saved','heart'],['settings','Settings','gear']
+];
+
+function renderSide(active){
+  let h = `<div class="logo"><div class="mark">${LOGO}</div><span>Loot<b>Hub</b></span></div><div class="navlabel">Browse</div>`;
+  NAV.forEach(([id,label,icon,count],i)=>{
+    if(i===6) h += '<div class="navlabel">You</div>';
+    h += `<a href="#${id}" class="nav ${active===id?'active':''}">${ic(icon)}${label}${count?`<span class="count">${count}</span>`:''}</a>`;
+  });
+  h += `<div class="spacer"></div><div class="sharecard"><h4>Share LootHub</h4><p>Tell your friends where the free stuff is.</p><button>${ic('share','width="15"')} Share link</button></div>`;
+  document.getElementById('side').innerHTML = h;
+  const b = [['home','Home','home'],['free','Free','gift'],['deals','Deals','tag'],['drops','Drops','drop'],['more','More','menu']];
+  document.getElementById('bnav').innerHTML = b.map(([id,l,icn])=>`<a href="#${id}" class="${active===id||(id==='more'&&['dlc','subs','platforms','saved','settings'].includes(active))?'active':''}">${ic(icn)}${l}</a>`).join('');
+}
+
+function gameCard(g,i){
+  const isFree = !g.n;
+  return `<div class="card" onclick="openGame(${i},'${g.p}','${g.t.replace(/'/g,"")}','${g.old}','${g.n||'Free'}')">
+    <div class="cover" style="background:${cv(i)}">${initials(g.t)}
+      <div class="tl">${isFree?`<span class="badge b-free">Free</span>`:`<span class="off">-${g.off}%</span>`}${g.type&&g.type!=='Free to keep'?`<span class="badge b-white">${g.type}</span>`:''}</div>
+      <div class="tr"><span class="share">${ic('share')}</span></div>
+    </div>
+    <div class="cbody">
+      <div class="ctitle">${g.t}</div>
+      <div class="cmeta">${pTag(g.p)}${g.end?`<span class="timer">${ic('clock')}${g.end}</span>`:''}</div>
+      <div class="price"><span class="old">${g.old}</span><span class="new ${isFree?'free':''}">${isFree?'FREE':g.n}</span>${g.low?'<span class="low">Lowest ever</span>':''}</div>
+    </div></div>`;
+}
+
+const pages = {
+ home(){
+  return `
+  <div class="hero">
+    <div class="art">NDR</div>
+    <div class="info">
+      <span class="badge b-free">Free to keep</span> <span class="badge b-purple">${ic('clock','width="12"')} Ends in 2d 4h</span>
+      <h3>Neon Drift Racers</h3>
+      <p>Free on ${P.epic[0]} this week — claim it and it's yours forever.</p>
+      <div class="row"><button class="btn btn-w">${ic('app')} Open in Epic Games</button><button class="btn btn-g">${ic('share')} Share</button></div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="k"><span class="ic">${ic('gift')}</span>Free right now</div><div class="v">12</div><div class="d">+3 today</div></div>
+    <div class="stat"><div class="k"><span class="ic">${ic('drop')}</span>Active drops</div><div class="v">34</div><div class="d">+5 this week</div></div>
+    <div class="stat"><div class="k"><span class="ic">${ic('tag')}</span>Deals tracked</div><div class="v">1,204</div><div class="d">87 new lows</div></div>
+    <div class="stat"><div class="k"><span class="ic">${ic('bolt')}</span>Total saved</div><div class="v">$842</div><div class="d">value of free games</div></div>
+  </div>
+  <div class="section"><div class="sechead"><h2>🎁 Free games — ending soon</h2><a href="#free">See all →</a></div>
+    <div class="grid hscroll">${FREE.slice(0,4).map(gameCard).join('')}</div></div>
+  <div class="section"><div class="sechead"><h2>📺 Live Twitch drops</h2><a href="#drops">See all →</a></div>${dropRow(DROPS[0],0)}${dropRow(DROPS[1],1)}</div>
+  <div class="section"><div class="sechead"><h2>🔥 Biggest discounts</h2><a href="#deals">See all →</a></div>
+    <div class="grid hscroll">${DEALS.slice(0,4).map((g,i)=>gameCard(g,i+3)).join('')}</div></div>`;
+ },
+ free(){
+  return head('Free Games','Every free game across all your platforms — claim before the timer runs out.',
+   ['All','Free to keep','Free weekend','Prime Gaming','Free to play','Demos']) +
+   `<div class="grid">${FREE.map(gameCard).join('')}</div>`;
+ },
+ deals(){
+  return head('Deals & Discounts','Prices compared across 20 stores. Sorted by biggest discount.',
+   ['All stores','Steam','Epic','GOG','Fanatical','Humble','GMG','90%+ off','Under $5','Lowest ever']) +
+   `<div class="table"><div class="tr-row head"><span></span><span>Game</span><span>Store</span><span>Discount</span><span>Price</span><span>Was</span><span></span></div>
+   ${DEALS.map((d,i)=>`<div class="tr-row"><div class="thumb" style="background:${cv(i)}"></div>
+     <div><div style="font-weight:700">${d.t}</div>${d.low?'<div class="low">● Lowest price ever</div>':''}<div class="plat mo" style="margin-top:4px">${pTag(d.p)}</div></div>
+     <span class="hm">${pTag(d.p)}</span><span class="hm"><span class="off">-${d.off}%</span></span>
+     <span><span class="new">${d.n}</span><div class="old mo" style="font-size:12px">${d.old}</div></span><span class="hm old">${d.old}</span>
+     <span class="hm" style="color:var(--muted)">${ic('ext','width="17"')}</span></div>`).join('')}</div>`;
+ },
+ drops(){
+  return head('Twitch Drops','Watch streams, earn in-game rewards. Link Twitch to track your progress.',
+   ['Active','Ending soon','Upcoming','My games','Completed']) + DROPS.map(dropRow).join('');
+ },
+ dlc(){
+  return head('DLC & Free Loot','Free DLCs, Prime loot, in-game items, mods and Twitch rewards.',
+   ['All','Free DLC','Prime Loot','In-game items','Twitch rewards','Mods']) +
+   `<div class="grid">${DLC.map((d,i)=>`<div class="card"><div class="cover" style="background:${cv(i+2)}">${initials(d.t)}<div class="tl"><span class="badge b-free">Free</span><span class="badge b-white">${d.type}</span></div><div class="tr"><span class="share">${ic('share')}</span></div></div>
+     <div class="cbody"><div class="ctitle">${d.t}</div><div class="cmeta">${pTag(d.p)}</div><button class="btn btn-p" style="width:100%;justify-content:center;margin-top:12px;padding:9px">Claim</button></div></div>`).join('')}</div>`;
+ },
+ subs(){
+  return head('Subscriptions & Prices','Discord Nitro, Game Pass, Ubisoft+ and more — current prices and promos.',['All','Discord','Game libraries','Streaming','Promos only']) +
+  `<div class="subs">${SUBS.map(s=>`<div class="sub-card">${s.deal?`<span class="badge b-free ribbon">Deal</span>`:''}<div class="logoBox" style="background:${s.c}">${s.l}</div><h3>${s.n}</h3>
+   <div class="pr">${s.pr}<small>${s.per}</small></div>${s.deal?`<div style="color:var(--green);font-weight:600;font-size:13px">${s.deal}</div>`:'<div style="color:var(--muted);font-size:13px">Regular price</div>'}
+   <ul>${s.f.map(x=>`<li>${x}</li>`).join('')}</ul><button class="btn ${s.deal?'btn-p':'btn-g'}" style="width:100%;justify-content:center">${ic('ext')} View offer</button></div>`).join('')}</div>`;
+ },
+ platforms(){
+  const keys = Object.keys(P); const on = ['steam','epic','gog','ubi','ea','amz','itch','bnet'];
+  return head('Platforms','Choose the stores you use. LootHub only shows you loot from these.') +
+  `<div class="sechead"><h2>Major PC stores</h2></div><div class="plats">${keys.slice(0,10).map(k=>platCard(k,on.includes(k))).join('')}</div>
+   <div class="section"><div class="sechead"><h2>More platforms</h2></div><div class="plats">${keys.slice(10).map(k=>platCard(k,['fan','gmg','ig'].includes(k))).join('')}</div></div>`;
+ },
+ saved(){
+  return head('Saved','Games you\'re watching. We\'ll notify you when they drop in price or go free.',['All','Price dropped','Free now']) +
+  `<div class="grid">${[DEALS[0],FREE[1],DEALS[4],DEALS[2]].map((g,i)=>gameCard(g,i+1)).join('')}</div>`;
+ },
+ settings(){
+  const r=(t,d,on)=>`<div class="setrow"><div><h4>${t}</h4><p>${d}</p></div><span class="toggle ${on?'on':''}"></span></div>`;
+  return head('Settings','Notifications, linked accounts and preferences.') + `<div class="setlist">
+   ${r('Free game alerts','Push notification the moment a game goes free',1)}
+   ${r('Twitch drop alerts','When new drops start for games you play',1)}
+   ${r('Price drop alerts','When a saved game hits your target price',1)}
+   ${r('Open links in installed apps','Steam, Epic, etc. open in the app when installed',1)}
+   ${r('Show mature content','Include 18+ titles in lists',0)}
+   <div class="setrow"><div><h4>Linked accounts</h4><p>Twitch · Steam · Epic Games</p></div><button class="btn btn-g" style="margin-left:auto">Manage</button></div>
+   <div class="setrow"><div><h4>Currency & region</h4><p>USD · United States</p></div><button class="btn btn-g" style="margin-left:auto">Change</button></div></div>`;
+ },
+ more(){ return head('More','') + `<div class="setlist">${NAV.slice(4).map(([id,l,icn])=>`<a href="#${id}" class="setrow" style="display:flex">${ic(icn,'width="20"')}<h4>${l}</h4><span style="margin-left:auto;color:var(--muted)">›</span></a>`).join('')}</div><div class="sharecard" style="margin-top:16px"><h4>Share LootHub</h4><p>Tell your friends where the free stuff is.</p><button>${ic('share','width="15"')} Share link</button></div>`; }
+};
+function head(t,s,chips){ return `<div class="pagehead"><div><h1>${t}</h1>${s?`<div class="sub">${s}</div>`:''}</div></div>${chips?`<div class="chips" style="margin-bottom:20px">${chips.map((c,i)=>`<span class="chip ${i?'':'on'}">${c}</span>`).join('')}</div>`:''}`; }
+function dropRow(d,i){
+  return `<div class="drop"><div class="dc" style="background:${cv(i+4)}">${initials(d.g)}<span class="live">LIVE · ${d.live}</span></div>
+   <div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><b style="font-size:16px">${d.g}</b><span class="badge b-purple">${d.w}</span><span class="timer">${ic('clock')}${d.end}</span></div>
+   <div class="rewards">${d.r.map(x=>`<span class="reward"><i></i>${x}</span>`).join('')}</div>
+   <div class="bar"><b style="width:${d.prog}%"></b></div><div style="font-size:12px;color:var(--muted);margin-top:5px">${d.prog===100?'✓ All rewards earned — claim in game':d.prog+'% progress'}</div></div>
+   <button class="btn twitch">${ic('ext')} Watch on Twitch</button></div>`;
+}
+function platCard(k,on){ return `<div class="platc"><div class="pl" style="background:${P[k][2]}">${P[k][1]}</div><div><h4>${P[k][0]}</h4><p>${on?'Following':'Not followed'}</p></div><span class="toggle ${on?'on':''}"></span></div>`; }
+
+function openGame(i,p,t,old,n){
+  const o = document.getElementById('overlay');
+  o.innerHTML = `<div class="modal" style="position:relative"><button class="closeX" onclick="closeGame()">✕</button>
+   <div class="cover" style="background:${cv(i)}">${initials(t)}</div>
+   <div class="mb"><div class="row" style="gap:6px">${n==='Free'?'<span class="badge b-free">Free to keep</span>':'<span class="off">DEAL</span>'}${pTag(p)}</div>
+   <h2>${t}</h2><div class="price" style="margin:0 0 12px"><span class="old">${old}</span><span class="new ${n==='Free'?'free':''}" style="font-size:22px">${n==='Free'?'FREE':n}</span><span class="timer">${ic('clock')}Ends in 2d 4h</span></div>
+   <p class="desc">A short game description pulled from the store. Screenshots, rating, genres and price history live here in the full app.</p>
+   <div class="openbox"><button class="btn btn-p">${ic('app')} Open in ${P[p][0]} app</button><button class="btn btn-g">${ic('ext')} Open website</button></div>
+   <div class="hint">${ic('info')} If the ${P[p][0]} app is installed it opens straight to this game. If not, the store website opens instead.</div></div></div>`;
+  o.classList.add('show');
+}
+function closeGame(){ document.getElementById('overlay').classList.remove('show'); }
+document.getElementById('overlay').addEventListener('click',e=>{ if(e.target.id==='overlay') closeGame(); });
+
+function route(){
+  const id = (location.hash.slice(1)||'home').split('?')[0];
+  const page = pages[id] ? id : 'home';
+  renderSide(page);
+  document.getElementById('content').innerHTML = pages[page]();
+  if (location.hash.includes('modal')) openGame(0,'epic','Neon Drift Racers','$24.99','Free'); else closeGame();
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route); route();
+</script>
+</body>
+</html>
