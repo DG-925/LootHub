@@ -34,11 +34,16 @@ npm install
 npm start
 ```
 
-### Build the installer (.exe)
+### Build the installers
 
 ```bash
-npm run dist:win     # -> dist/LootHub Setup 1.0.0.exe
+npm run dist:win     # -> dist/LootHub-Setup-1.0.0.exe (installer) + dist/LootHub-Portable-1.0.0.exe (no install)
+npx electron-builder --linux   # -> dist/LootHub-1.0.0.AppImage
 ```
+
+Building the Windows files on Linux needs Wine (64- and 32-bit). On Windows it works out of the box.
+The installers aren't code-signed, so Windows SmartScreen shows "Windows protected your PC" the first time —
+click **More info → Run anyway**.
 
 Or let GitHub build it: **Actions → Build desktop app → Run workflow**, then download the `LootHub-windows-latest` artifact.
 

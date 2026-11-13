@@ -2,7 +2,7 @@
   "name": "loothub",
   "productName": "LootHub",
   "version": "1.0.0",
-  "description": "Free games, deals, DLC, Twitch drops and subscription prices across every PC store — with alerts.",
+  "description": "Free games, deals, DLC, Twitch drops and subscription prices across every PC store \u2014 with alerts.",
   "main": "electron/main.js",
   "scripts": {
     "start": "electron .",
@@ -27,20 +27,55 @@
       "package.json"
     ],
     "win": {
-      "target": "nsis",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "icon": "app/assets/icon-512.png"
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "LootHub",
+      "artifactName": "LootHub-Setup-${version}.${ext}"
     },
     "mac": {
       "target": "dmg",
-      "icon": "app/assets/icon-512.png"
+      "icon": "app/assets/icon-512.png",
+      "category": "public.app-category.games"
     },
     "linux": {
-      "target": "AppImage",
-      "icon": "app/assets/icon-512.png"
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "app/assets/icon-512.png",
+      "category": "Game",
+      "artifactName": "LootHub-${version}.${ext}"
+    },
+    "directories": {
+      "output": "dist"
+    },
+    "portable": {
+      "artifactName": "LootHub-Portable-${version}.${ext}"
     }
-  }
+  },
+  "author": "LootHub",
+  "homepage": "https://github.com/DG-925/LootHub"
 }
